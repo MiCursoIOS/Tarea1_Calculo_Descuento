@@ -56,12 +56,17 @@ class ViewController: UIViewController {
             let resultado = " Nombre: \(nombres)\n Edad: \(edad)\n Sueldo RRHH: \(montoRH)\n\n Descuento AFP: \(montoDescuentoAFP)\n Descuento Renta: \(montoDescuentoRenta)\n Total a Recibir: \(totalARecibir)"
             
             txtResultado.text = resultado
+            ocultarTeclado()
             mostrarControlesDeResultados(mostrar: true)
             
         } else {
             mostrarAlertaError()
         }
         
+    }
+    
+    func ocultarTeclado() -> Void {
+        self.view.endEditing(true)
     }
     
     func mostrarAlertaError() -> Void {
