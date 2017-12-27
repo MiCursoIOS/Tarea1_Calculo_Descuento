@@ -20,6 +20,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var panelResultados: UIView!
     @IBOutlet weak var btnLimpiar: UIButton!
     
+    var calculoEnProceso: Bool = false
+    
     @IBAction func calcularDescuentoRecibido(_ sender: Any) {
         
         // validando datos
@@ -59,11 +61,21 @@ class ViewController: UIViewController {
             ocultarTeclado()
             mostrarControlesDeResultados(mostrar: true)
             
+            calculoEnProceso = true
+            
         } else {
             mostrarAlertaError()
         }
         
     }
+    
+    @IBAction func eventoCambioSwitchAfiliacion(_ sender: Any) {
+        if calculoEnProceso {
+            calcularDescuentoRecibido(swEsAfiliado)
+        }
+    }
+   
+    
     
     func ocultarTeclado() -> Void {
         self.view.endEditing(true)
@@ -89,6 +101,7 @@ class ViewController: UIViewController {
         txtMontoRH.becomeFirstResponder()
         // ocultar controles
         mostrarControlesDeResultados(mostrar: false)
+        calculoEnProceso = false
         
     }
     
