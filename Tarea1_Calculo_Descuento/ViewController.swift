@@ -12,7 +12,8 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var txtMontoRH: UITextField!
     @IBOutlet weak var txtNombres: UITextField!
-    @IBOutlet weak var txtEdad: UITextField!
+    
+    @IBOutlet weak var tpFechaNacimiento: UIDatePicker!
     @IBOutlet weak var txtEmail: UITextField!
     @IBOutlet weak var swEsAfiliado: UISwitch!
     @IBOutlet weak var txtResultado: UITextView!
@@ -27,13 +28,13 @@ class ViewController: UIViewController {
         // validando datos
         if let montoRH = Double(txtMontoRH.text!), montoRH > 0,
            let nombres = txtNombres.text, !nombres.isEmpty,
-           let edad = Int(txtEdad.text!), edad >= 18,
            let email = txtEmail.text, !email.isEmpty, email.isValidEmail() {
             
             var montoRetencion: Double = 0.0
             var montoDescuentoAFP: Double = 0.0
             var montoDescuentoRenta: Double = 0.0
             var totalARecibir: Double = 0.0
+            let edad = calcularEdad()
             
             // calculando
             if edad < 40 {
@@ -69,13 +70,22 @@ class ViewController: UIViewController {
         
     }
     
+    func calcularEdad() -> Int {
+        let fechaHoy = Date()
+        let fechaNacimiento = tpFechaNacimiento.date
+        let calendar = Calendar.current
+        
+        let anioActual = calendar.component(.year, from: fechaHoy)
+        let anioNacimiento = calendar.component(.year, from: fechaNacimiento)
+        
+        return anioActual - anioNacimiento
+    }
+    
     @IBAction func eventoCambioSwitchAfiliacion(_ sender: Any) {
         if calculoEnProceso {
             calcularDescuentoRecibido(swEsAfiliado)
         }
     }
-   
-    
     
     func ocultarTeclado() -> Void {
         self.view.endEditing(true)
@@ -93,8 +103,7 @@ class ViewController: UIViewController {
     @IBAction func limpiarTextFields(_ sender: Any) {
         txtMontoRH.text = ""
         txtNombres.text = ""
-        txtEdad.text = ""
-        txtEmail.text = ""
+        txtEmail.text = "@domain.com"
         swEsAfiliado.setOn(true, animated: true)
         txtResultado.text = ""
         // devolver el foco
@@ -115,6 +124,7 @@ class ViewController: UIViewController {
         
         // ocultar controles al iniciar
         mostrarControlesDeResultados(mostrar: false)
+        
     }
 
     override func didReceiveMemoryWarning() {
